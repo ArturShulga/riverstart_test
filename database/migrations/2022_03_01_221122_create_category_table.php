@@ -18,6 +18,7 @@ class CreateCategoryTable extends Migration
             $table->string('title')->comment('Название');
             $table->text('description')->nullable()->comment('Описание');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->index('title');
         });

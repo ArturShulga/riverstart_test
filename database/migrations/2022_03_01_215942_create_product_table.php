@@ -20,6 +20,7 @@ class CreateProductTable extends Migration
             $table->float('price', 10, 2)->comment('Цена');
             $table->text('description')->nullable()->comment('Описание');
             $table->timestamps();
+            $table->softDeletes();
 
             # будет производиться поиск по названию
             $table->index('title');
