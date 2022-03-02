@@ -7,6 +7,7 @@ use App\Http\Requests\v1\CategoryRequest;
 use App\Http\Resources\v1\CategoryResource;
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -41,7 +42,20 @@ class CategoriesController extends Controller{
         ]);
     }
 
-    public function show(Category $category){
+    public function show($id){
+        try {
+            $category = Category::query()
+                ->with('products')
+                ->where(['id' => $id])
+                ->firstOrFail();
+
+        } catch (ModelNotFoundException $e){
+            return JsonResource::make([
+                'status' => 'error',
+                'message' => 'Категория не найдена'
+            ]);
+        }
+
         return CategoryResource::make($category->load('products'));
     }
 
