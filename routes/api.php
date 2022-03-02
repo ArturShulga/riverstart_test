@@ -28,7 +28,8 @@ Route::group([
 Route::group([
     'prefix' => 'catalog'
 ], function ($router) {
-    Route::apiResource('category', 'CategoryController');
+    Route::apiResource('category', 'CategoriesController');
+    Route::apiResource('product', 'ProductsController');
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

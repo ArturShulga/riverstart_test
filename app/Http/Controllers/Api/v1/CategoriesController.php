@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 
-class CategoryController extends Controller{
+class CategoriesController extends Controller{
 
     public function index(Request $request){
         $categoriesBuilder = Category::query();
