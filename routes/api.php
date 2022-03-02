@@ -25,6 +25,12 @@ Route::group([
     Route::get('/user-profile', [\App\Http\Controllers\AuthController::class, 'userProfile']);
 });
 
+Route::group([
+    'prefix' => 'catalog'
+], function ($router) {
+    Route::apiResource('category', 'CategoryController');
+});
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
