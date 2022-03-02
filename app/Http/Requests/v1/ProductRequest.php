@@ -30,6 +30,7 @@ class ProductRequest extends FormRequest
             'vendor_code' => 'required',
             'price' => 'required|numeric',
             'categories' => 'required|array|min:2|max:10',
+            'categories.*' => 'exists:category,id'
         ];
     }
 
@@ -49,10 +50,11 @@ class ProductRequest extends FormRequest
             'vendor_code.required' => 'Артикул товара обязателен для заполнения',
             'price.required' => 'Цена обязательна для заполнения',
             'price.numeric' => 'Значения цены должно быть числовым',
-            'categories.required' => 'Значение катогорий обязательно для заполнения',
+            'categories.required' => 'Значение категорий обязательно для заполнения',
             'categories.array' => 'Значение категорий должно передаваться массивом',
             'categories.min' => 'Минимальное количество категорий 2',
             'categories.max' => 'Максимальное количество категорий 10',
+            'categories.*.exists' => 'Указанная категория не существуют'
         ];
     }
 }

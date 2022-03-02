@@ -24,7 +24,8 @@ class Product extends Model{
         'title',
         'vendor_code',
         'price',
-        'description'
+        'description',
+        'is_published'
     ];
 
     public function categories(){

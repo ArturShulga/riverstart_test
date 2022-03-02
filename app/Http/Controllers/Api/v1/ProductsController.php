@@ -17,7 +17,53 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class ProductsController extends Controller{
 
     public function index(Request $request){
-        
+        $productBuilder = Product::query();
+
+        # полное или частичное совпадение по названию товара
+        if ($request->has('search.product_title')){
+            $productBuilder->where('title', 'LIKE', '%'. $request->get('search')['product_title'] .'%');
+        }
+
+        # минимальная цена
+        if ($request->has('search.price_from')){
+            $productBuilder->where('price', '>=', $request->get('search')['price_from']);
+        }
+
+        # максимальная цена
+        if ($request->has('search.price_to')){
+            $productBuilder->where('price', '<=', $request->get('search')['price_to']);
+        }
+
+        # опубликованные / неопубликованные
+        if ($request->has('search.is_published')){
+            $productBuilder->where([
+                'is_published' => $request->get('search')['is_published']
+            ]);
+        }
+
+        # не удаленные (предполагается что изначально показываются все)
+        if (!$request->has('search.not_trashed')){
+            $productBuilder->withTrashed();
+        }
+
+        # по названию категории
+        if ($request->has('search.category_title')){
+            $productBuilder->whereHas('categories', function($query) use ($request){
+                $query->where('title', 'LIKE', '%'. $request->get('search')['category_title'] .'%');
+            });
+        }
+
+        # по ID категории
+        if ($request->has('search.category_id')){
+            $productBuilder->whereHas('categories', function($query) use ($request){
+                $query->where([
+                    'id' => $request->get('search')['category_id']
+                ]);
+            });
+        }
+
+        return ProductResource::collection($productBuilder->with('categories')->get());
+
     }
 
     public function store(ProductRequest $request){
